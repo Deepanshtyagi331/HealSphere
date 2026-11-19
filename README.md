@@ -1,6 +1,6 @@
-# HealSphere — Energy Therapy & Quantum Healing
+# Instant Healing Therapy — Next.js Application
 
-A complete, responsive multi-page web application for **HealSphere**, inspired by holistic energy therapy, founded by quantum healer and author **Sachin Karve**.
+A complete, responsive multi-page web application inspired by [Instant Healing Therapy](https://instanthealingtherapy.com/), founded by quantum healer and author **Sachin Karve**.
 
 ## Technology Stack
 
@@ -9,14 +9,13 @@ A complete, responsive multi-page web application for **HealSphere**, inspired b
 - **Styling:** Tailwind CSS
 - **Icons:** Lucide React
 - **Forms & Validation:** React Hook Form & Zod
-- **Backend:** Next.js Route Handlers (`/api/contact`)
-- **Database:** MongoDB / Mongoose (with standalone console mode for easy Vercel deployment)
+- **API & Email:** Next.js Route Handlers (`/api/contact`) & Nodemailer (SMTP)
 
 ---
 
 ## Page Hierarchy & Routes
 
-1. **`/`** — Homepage (Hero Banner Slider with automatic 5s crossfade, Quantum Introduction, About Sachin Karve, Benefits & Approach, Courses, Sessions, Testimonials, CTA, Footer Form)
+1. **`/`** — Homepage (Hero, Quantum Introduction, About Sachin Karve, Benefits & 4-Step Approach, Courses, Sessions, Testimonials, CTA, Footer Form)
 2. **`/what-is-quantum-healing`** — Detailed explanation of the quantum field of pure consciousness, the 6 levels of the human being, and comparisons to conventional & energy modalities.
 3. **`/learn-energy-healing`** — Overview of learning healing for beginners and practitioners.
 4. **`/learn-quantum-healing`** — Masterclass on Quantum Healing (12-hour video course, 52 lessons, Triangulation, syllabus, and certificate).
@@ -30,14 +29,43 @@ A complete, responsive multi-page web application for **HealSphere**, inspired b
 
 ---
 
-## Key Features
+## Shared Layout & Components
 
-- **HealSphere Header:** 3-section responsive layout with the HealSphere lotus & sphere branding, 6 clean navigation links, and desktop action buttons.
-- **Hero Banner Slider:** Automatic infinite slider cycling through 3 healing artworks with 1.5-second opacity crossfade every 5 seconds.
+- **Top Contact Bar:** Phone/WhatsApp (`+91 9819858269`), Email (`sachin@instanthealingtherapy.com`), global timezone coverage.
+- **Header & Navigation:** Responsive navbar with desktop hover dropdown for courses, call-to-action buttons, and mobile slide-over drawer.
 - **WhatsApp Floating Button:** Corner button with quick chat prompt directly opening WhatsApp conversation.
 - **Scroll-to-Top Button:** Appears smoothly after scrolling down the page.
-- **Footer with Integrated Contact Form:** Validated enquiry form embedded into the footer of every route.
-- **Vercel-Ready Contact API:** Form submissions are logged to the console/Vercel runtime logs and optionally stored in MongoDB.
+- **Footer with Integrated Contact Form on EVERY Page:** Validated enquiry form embedded into the footer of every route.
+
+---
+
+## Contact Form & Email System
+
+### Form Features
+- **Client-Side Validation:** React Hook Form with Zod schema (`src/lib/validation.ts`).
+- **Server-Side Validation:** Re-validated via Zod in `src/app/api/contact/route.ts`.
+- **Spam & Abuse Protection:**
+  - Hidden honeypot field to block automated bot submissions.
+  - In-memory sliding-window IP rate limiter (`src/lib/rateLimit.ts`).
+- **Email Delivery:** Nodemailer dispatches styled responsive HTML emails to `CONTACT_RECEIVER_EMAIL`.
+- **Duplicate Protection:** Disables submit button and shows active spinner during in-flight requests.
+- **Dev / Simulation Mode:** When SMTP credentials are not yet configured, the system logs submission payloads cleanly and returns a simulated success response.
+
+### Environment Variables
+Configure `.env.local` based on `.env.example`:
+
+```env
+# Receiver of contact enquiries
+CONTACT_RECEIVER_EMAIL=sachin@instanthealingtherapy.com
+
+# SMTP Server Settings (Server-only credentials)
+SMTP_HOST=smtp.gmail.com
+SMTP_PORT=587
+SMTP_SECURE=false
+SMTP_USER=your-smtp-email@gmail.com
+SMTP_PASS=your-smtp-app-password
+SMTP_FROM="Instant Healing Therapy" <no-reply@instanthealingtherapy.com>
+```
 
 ---
 
